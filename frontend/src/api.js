@@ -94,13 +94,23 @@ export async function listStatementMonths(year) {
 }
 
 export async function listStatements(month) {
-  const res = await fetch(`${BASE}/statements?month=${encodeURIComponent(month)}`)
+  const qs = month ? `?month=${encodeURIComponent(month)}` : ''
+  const res = await fetch(`${BASE}/statements${qs}`)
   return handle(res, 'Could not load statements.')
 }
 
 export async function getStatementDashboard(statementId) {
   const res = await fetch(`${BASE}/statements/${statementId}`)
   return handle(res, 'Could not load that statement.')
+}
+
+export async function renameStatement(statementId, filename) {
+  const res = await fetch(`${BASE}/statements/${statementId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filename }),
+  })
+  return handle(res, 'Could not rename that statement.')
 }
 
 export async function deleteStatement(statementId) {
