@@ -6,6 +6,7 @@ import SignupPage from './pages/SignupPage'
 import HomePage from './pages/HomePage'
 import AnalysisPage from './pages/AnalysisPage'
 import PlanningPage from './pages/PlanningPage'
+import RemindersPage from './pages/RemindersPage'
 import AboutPage from './pages/AboutPage'
 import ProfilePage from './pages/ProfilePage'
 
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/analysis" element={<AnalysisPage />} />
           <Route path="/planning" element={<PlanningPage />} />
+          <Route path="/reminders" element={<RemindersPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>

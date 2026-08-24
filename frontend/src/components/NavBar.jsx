@@ -23,6 +23,7 @@ export default function NavBar() {
             <NavLink to="/" end className={linkClass}>Overview</NavLink>
             <NavLink to="/analysis" className={linkClass}>Analysis</NavLink>
             <NavLink to="/planning" className={linkClass}>Expense Planning</NavLink>
+            <NavLink to="/reminders" className={linkClass}>EMI &amp; Reminders</NavLink>
             <NavLink to="/about" className={linkClass}>About</NavLink>
           </nav>
         </div>

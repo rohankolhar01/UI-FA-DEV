@@ -143,10 +143,12 @@ function MonthPlanner({ month, onBack }) {
   const [newCreditCategory, setNewCreditCategory] = useState('')
   const [newCreditAmount, setNewCreditAmount] = useState('')
   const [addingCredit, setAddingCredit] = useState(false)
+  const [creditCategoryMode, setCreditCategoryMode] = useState('select') // 'select' | 'custom'
 
   const [newCategory, setNewCategory] = useState('')
   const [newAmount, setNewAmount] = useState('')
   const [addingExpense, setAddingExpense] = useState(false)
+  const [categoryMode, setCategoryMode] = useState('select') // 'select' | 'custom'
 
   const load = async (m) => {
     setLoading(true)
@@ -193,6 +195,8 @@ function MonthPlanner({ month, onBack }) {
     try {
       await saveBudget({ month, category: newCreditCategory, planned_amount: value, note: '', entry_type: 'income' })
       setNewCreditAmount('')
+      setCreditCategoryMode('select')
+      setNewCreditCategory('') // load() below fills this back in from the refreshed list
       await load(month)
     } catch (err) {
       setError(err.message)
@@ -213,6 +217,8 @@ function MonthPlanner({ month, onBack }) {
     try {
       await saveBudget({ month, category: newCategory, planned_amount: value, note: '', entry_type: 'expense' })
       setNewAmount('')
+      setCategoryMode('select')
+      setNewCategory('') // load() below fills this back in from the refreshed list
       await load(month)
     } catch (err) {
       setError(err.message)
@@ -228,6 +234,26 @@ function MonthPlanner({ month, onBack }) {
 
   const availableCreditCategories = categories.filter((c) => !credits.some((r) => r.category === c))
   const availableCategories = categories.filter((c) => !expenses.some((e) => e.category === c))
+
+  const toggleCreditCategoryMode = () => {
+    if (creditCategoryMode === 'select') {
+      setCreditCategoryMode('custom')
+      setNewCreditCategory('')
+    } else {
+      setCreditCategoryMode('select')
+      setNewCreditCategory(availableCreditCategories[0] || categories[0] || '')
+    }
+  }
+
+  const toggleCategoryMode = () => {
+    if (categoryMode === 'select') {
+      setCategoryMode('custom')
+      setNewCategory('')
+    } else {
+      setCategoryMode('select')
+      setNewCategory(availableCategories[0] || categories[0] || '')
+    }
+  }
 
   return (
     <div className="max-w-5xl mx-auto py-8 px-6 space-y-6">
@@ -266,11 +292,36 @@ function MonthPlanner({ month, onBack }) {
                   <h3 className="font-display text-base">Credit</h3>
                 </div>
                 <form onSubmit={handleAddCredit} className="flex flex-col gap-3">
-                  <select value={newCreditCategory} onChange={(e) => setNewCreditCategory(e.target.value)} className="field">
-                    {(availableCreditCategories.length ? availableCreditCategories : categories).map((c) => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
+                  <div className="flex gap-2">
+                    {creditCategoryMode === 'select' ? (
+                      <select
+                        value={newCreditCategory}
+                        onChange={(e) => setNewCreditCategory(e.target.value)}
+                        className="field flex-1"
+                      >
+                        {(availableCreditCategories.length ? availableCreditCategories : categories).map((c) => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        autoFocus
+                        value={newCreditCategory}
+                        onChange={(e) => setNewCreditCategory(e.target.value)}
+                        placeholder="New category name"
+                        className="field flex-1"
+                      />
+                    )}
+                    <button
+                      type="button"
+                      onClick={toggleCreditCategoryMode}
+                      className="btn-secondary shrink-0 px-3"
+                      title={creditCategoryMode === 'select' ? 'Add a new category' : 'Choose from list'}
+                    >
+                      {creditCategoryMode === 'select' ? '+' : '×'}
+                    </button>
+                  </div>
                   <div className="flex gap-2">
                     <input
                       type="number" min="0" step="1" value={newCreditAmount}
@@ -290,11 +341,36 @@ function MonthPlanner({ month, onBack }) {
                   <h3 className="font-display text-base">Debit</h3>
                 </div>
                 <form onSubmit={handleAddExpense} className="flex flex-col gap-3">
-                  <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)} className="field">
-                    {(availableCategories.length ? availableCategories : categories).map((c) => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
+                  <div className="flex gap-2">
+                    {categoryMode === 'select' ? (
+                      <select
+                        value={newCategory}
+                        onChange={(e) => setNewCategory(e.target.value)}
+                        className="field flex-1"
+                      >
+                        {(availableCategories.length ? availableCategories : categories).map((c) => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        autoFocus
+                        value={newCategory}
+                        onChange={(e) => setNewCategory(e.target.value)}
+                        placeholder="New category name"
+                        className="field flex-1"
+                      />
+                    )}
+                    <button
+                      type="button"
+                      onClick={toggleCategoryMode}
+                      className="btn-secondary shrink-0 px-3"
+                      title={categoryMode === 'select' ? 'Add a new category' : 'Choose from list'}
+                    >
+                      {categoryMode === 'select' ? '+' : '×'}
+                    </button>
+                  </div>
                   <div className="flex gap-2">
                     <input
                       type="number" min="0" step="1" value={newAmount}
