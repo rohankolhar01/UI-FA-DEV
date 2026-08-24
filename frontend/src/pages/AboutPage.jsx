@@ -2,7 +2,7 @@ const STEPS = [
   {
     step: '01',
     title: 'Import',
-    body: 'Upload a bank statement PDF. Ledger reconstructs the transaction table directly from the document — no manual entry or copy-paste.',
+    body: 'Upload a bank statement PDF. CredEx1 reconstructs the transaction table directly from the document — no manual entry or copy-paste.',
   },
   {
     step: '02',
@@ -28,7 +28,7 @@ export default function AboutPage() {
         <p className="text-xs font-medium uppercase tracking-wide text-brand mb-3">About</p>
         <h1 className="font-display text-3xl mb-4">Built for clarity on where money goes.</h1>
         <p className="text-muted max-w-2xl text-lg">
-          Bank statements are written for banks, not for people. Ledger turns a statement
+          Bank statements are written for banks, not for people. CredEx1 turns a statement
           PDF into a readable account of who you paid, what it was for, and how spending
           tracks over time.
         </p>
@@ -37,7 +37,7 @@ export default function AboutPage() {
       <div className="grid gap-4 sm:grid-cols-2">
         {STEPS.map((s) => (
           <div key={s.step} className="card p-6">
-            <span className="inline-block rounded-md bg-brandSoft px-2 py-0.5 text-xs font-semibold text-brand mb-3">
+            <span className="inline-block rounded-lg bg-gradient-to-br from-brand to-brand2 px-2.5 py-1 text-xs font-semibold text-white mb-3 shadow-md shadow-brand/25">
               {s.step}
             </span>
             <h3 className="font-display text-base mb-2">{s.title}</h3>

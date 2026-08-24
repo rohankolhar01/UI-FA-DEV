@@ -1,8 +1,10 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 
+// Sequential cyan — the second sequential context, its own one-hue ramp so it
+// never reads as "the same series" as the indigo category chart.
 const PALETTE = [
-  '#0E7490', '#0891B2', '#06A3C4', '#22B8CF', '#4DC7DC',
-  '#6FD3E4', '#8EDDEB', '#A9E6F1', '#C3EEF6', '#DCF5FA',
+  '#164E63', '#155E75', '#0E7490', '#0891B2', '#06A6C9',
+  '#22B8D9', '#45C7E3', '#67D4EC', '#8BE0F2', '#AFEAF7',
 ]
 
 const fmt = (n) =>
@@ -36,10 +38,11 @@ export default function VendorChart({ data }) {
             />
             <Tooltip
               formatter={(v) => [fmt(v), 'Paid']}
-              cursor={{ fill: '#F1F5F9' }}
+              cursor={{ fill: 'rgba(6,182,212,0.08)' }}
               contentStyle={{
-                border: '1px solid #E2E8F0', borderRadius: 8, fontSize: 12,
-                boxShadow: '0 4px 12px rgba(15,23,42,0.08)',
+                border: '1px solid rgba(255,255,255,0.7)', borderRadius: 12, fontSize: 12,
+                background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)',
+                boxShadow: '0 8px 24px rgba(49,46,129,0.14)',
               }}
             />
             <Bar dataKey="total" radius={[0, 4, 4, 0]} barSize={18}>

@@ -66,7 +66,7 @@ export default function TransactionTable({ transactions, categories, onCategoryC
 
       <div className="overflow-x-auto max-h-[560px] overflow-y-auto">
         <table className="w-full text-sm">
-          <thead className="sticky top-0 bg-paper z-10">
+          <thead className="sticky top-0 bg-white/85 backdrop-blur-md z-10">
             <tr className="text-xs font-medium uppercase tracking-wide text-muted border-b border-rule">
               <th className="text-left px-5 py-3">Date</th>
               <th className="text-left px-5 py-3">Vendor</th>
@@ -79,7 +79,7 @@ export default function TransactionTable({ transactions, categories, onCategoryC
           </thead>
           <tbody>
             {filtered.map((t) => (
-              <tr key={t.id} className="border-b border-rule/70 hover:bg-brandSoft/40">
+              <tr key={t.id} className="border-b border-rule/50 hover:bg-brandSoft/50">
                 <td className="px-5 py-2.5 whitespace-nowrap text-muted tabular-nums">{t.date}</td>
                 <td className="px-5 py-2.5 max-w-[220px] truncate font-medium" title={t.particulars}>
                   {t.vendor || <span className="text-muted font-normal">—</span>}

@@ -28,7 +28,12 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="max-w-sm w-full card p-8">
-        <p className="text-xs font-medium uppercase tracking-wide text-brand mb-2 text-center">Ledger</p>
+        <div className="flex justify-center mb-3">
+          <span className="w-11 h-11 rounded-xl bg-gradient-to-br from-brand via-brand2 to-brand3 text-white grid place-items-center text-lg font-bold shadow-lg shadow-brand/30">
+            C
+          </span>
+        </div>
+        <p className="text-xs font-medium uppercase tracking-wide text-brand mb-2 text-center">CredEx1</p>
         <h1 className="font-display text-2xl text-center mb-8">Welcome back.</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">

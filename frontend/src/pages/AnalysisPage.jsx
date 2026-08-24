@@ -23,6 +23,8 @@ export default function AnalysisPage() {
 
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
+  const [pendingFile, setPendingFile] = useState(null) // set once a PDF comes back "needs a password"
+  const [pdfPassword, setPdfPassword] = useState('')
 
   const [renamingId, setRenamingId] = useState(null)
   const [renameValue, setRenameValue] = useState('')
@@ -60,18 +62,34 @@ export default function AnalysisPage() {
     setDashboardError(null)
   }
 
-  const handleUpload = async (file) => {
+  const handleUpload = async (file, password) => {
     setUploading(true)
     setUploadError(null)
     try {
-      const result = await uploadStatement(file, null)
+      const result = await uploadStatement(file, null, password)
+      setPendingFile(null)
+      setPdfPassword('')
       await refreshStatements()
       if (result.statement_id) await openStatement(result.statement_id)
     } catch (e) {
+      // Keep the same File object around so retrying doesn't need a re-pick.
+      if (e.needsPassword) setPendingFile(file)
+      else setPendingFile(null)
       setUploadError(e.message)
     } finally {
       setUploading(false)
     }
+  }
+
+  const handlePasswordRetry = (e) => {
+    e.preventDefault()
+    if (pendingFile) handleUpload(pendingFile, pdfPassword)
+  }
+
+  const cancelPasswordPrompt = () => {
+    setPendingFile(null)
+    setPdfPassword('')
+    setUploadError(null)
   }
 
   const handleCategoryChanged = () => {
@@ -144,7 +162,30 @@ export default function AnalysisPage() {
         <p className="text-sm text-muted mt-1">Upload a statement, or pick one below to see its breakdown.</p>
       </div>
 
-      <UploadZone onFile={handleUpload} loading={uploading} error={uploadError} compact />
+      {pendingFile ? (
+        <form onSubmit={handlePasswordRetry} className="card p-6 space-y-3">
+          <p className="text-sm font-medium truncate">{pendingFile.name}</p>
+          {uploadError && <p className="text-sm text-withdrawal">{uploadError}</p>}
+          <div className="flex flex-col sm:flex-row gap-2">
+            <input
+              type="password"
+              autoFocus
+              value={pdfPassword}
+              onChange={(e) => setPdfPassword(e.target.value)}
+              placeholder="PDF password"
+              className="field"
+            />
+            <button type="submit" disabled={uploading || !pdfPassword} className="btn-primary shrink-0">
+              {uploading ? 'Unlocking…' : 'Unlock & upload'}
+            </button>
+            <button type="button" onClick={cancelPasswordPrompt} className="btn-secondary shrink-0">
+              Cancel
+            </button>
+          </div>
+        </form>
+      ) : (
+        <UploadZone onFile={handleUpload} loading={uploading} error={uploadError} compact />
+      )}
 
       {renameError && (
         <div className="rounded-md border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-withdrawal">{renameError}</div>
@@ -155,10 +196,10 @@ export default function AnalysisPage() {
       ) : (
         <ul className="space-y-2">
           {statements.map((s) => (
-            <li key={s.id} className="rounded-card border border-rule bg-surface transition hover:border-brand">
+            <li key={s.id} className="rounded-2xl border border-white/65 bg-white/65 backdrop-blur-md shadow-card transition hover:border-brand hover:bg-white/85">
               {renamingId === s.id ? (
                 <form onSubmit={(e) => handleRenameSubmit(e, s.id)} className="flex items-center gap-2 px-4 py-3">
-                  <span className="w-9 h-9 shrink-0 rounded-lg bg-brandSoft text-brand grid place-items-center text-[10px] font-semibold">
+                  <span className="w-9 h-9 shrink-0 rounded-xl bg-gradient-to-br from-brand via-brand2 to-brand3 text-white grid place-items-center text-[10px] font-semibold shadow-md shadow-brand/25">
                     PDF
                   </span>
                   <input
@@ -180,7 +221,7 @@ export default function AnalysisPage() {
                     onClick={() => openStatement(s.id)}
                     className="flex items-center gap-3 flex-1 min-w-0 text-left"
                   >
-                    <span className="w-9 h-9 shrink-0 rounded-lg bg-brandSoft text-brand grid place-items-center text-[10px] font-semibold">
+                    <span className="w-9 h-9 shrink-0 rounded-xl bg-gradient-to-br from-brand via-brand2 to-brand3 text-white grid place-items-center text-[10px] font-semibold shadow-md shadow-brand/25">
                       PDF
                     </span>
                     <span className="min-w-0 flex-1">

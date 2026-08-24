@@ -37,11 +37,18 @@ export async function getMe() {
   return handle(res, 'Could not load session.')
 }
 
-export async function uploadStatement(file, accountId) {
+export async function uploadStatement(file, accountId, password) {
   const form = new FormData()
   form.append('file', file)
   if (accountId) form.append('account_id', accountId)
+  if (password) form.append('password', password)
   const res = await fetch(`${BASE}/accounts/upload`, { method: 'POST', body: form })
+  if (res.status === 428) {
+    const err = await res.json().catch(() => ({ detail: 'This PDF is password-protected.' }))
+    const e = new Error(err.detail || 'This PDF is password-protected.')
+    e.needsPassword = true
+    throw e
+  }
   return handle(res, 'Upload failed.')
 }
 
