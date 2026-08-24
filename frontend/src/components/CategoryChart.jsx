@@ -1,9 +1,10 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 
-// Sequential blues: one visual family, darkest = largest spend.
+// Sequential indigo: one hue, dark→light, darkest = largest spend.
+// Ordinal ramp — the lightest step still clears 2:1 on the app surface.
 const PALETTE = [
-  '#1E3A8A', '#1D4ED8', '#2563EB', '#3B82F6', '#60A5FA',
-  '#7DA9FB', '#93C5FD', '#A9D2FE', '#BFDBFE', '#DBEAFE',
+  '#312E81', '#3730A3', '#4338CA', '#4F46E5', '#6366F1',
+  '#7C7BF0', '#8B8AF2', '#9C9BF4', '#ADACF6', '#BEBDF8',
 ]
 
 const fmt = (n) =>
@@ -34,10 +35,11 @@ export default function CategoryChart({ data }) {
             />
             <Tooltip
               formatter={(v) => [fmt(v), 'Spend']}
-              cursor={{ fill: '#F1F5F9' }}
+              cursor={{ fill: 'rgba(79,70,229,0.07)' }}
               contentStyle={{
-                border: '1px solid #E2E8F0', borderRadius: 8, fontSize: 12,
-                boxShadow: '0 4px 12px rgba(15,23,42,0.08)',
+                border: '1px solid rgba(255,255,255,0.7)', borderRadius: 12, fontSize: 12,
+                background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(12px)',
+                boxShadow: '0 8px 24px rgba(49,46,129,0.14)',
               }}
             />
             <Bar dataKey="total" radius={[0, 4, 4, 0]} barSize={18}>

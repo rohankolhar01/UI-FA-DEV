@@ -61,7 +61,7 @@ export default function ProfilePage() {
       </div>
 
       <div className="card p-6 flex items-center gap-5">
-        <div className="w-16 h-16 rounded-full bg-brandSoft text-brand flex items-center justify-center text-xl font-semibold overflow-hidden shrink-0">
+        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-brand via-brand2 to-brand3 text-white flex items-center justify-center text-xl font-semibold overflow-hidden shrink-0 shadow-lg shadow-brand/25">
           {form.avatar ? (
             <img src={form.avatar} alt="Avatar" className="w-full h-full object-cover" />
           ) : (

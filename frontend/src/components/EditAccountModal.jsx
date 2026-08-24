@@ -32,8 +32,8 @@ export default function EditAccountModal({ account, onSave, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-ink/40 flex items-start justify-center overflow-y-auto py-16 px-4">
-      <div className="bg-paper border border-rule max-w-md w-full relative">
+    <div className="fixed inset-0 z-50 bg-ink/30 backdrop-blur-sm flex items-start justify-center overflow-y-auto py-16 px-4">
+      <div className="card max-w-md w-full relative shadow-raised">
         <button
           onClick={onClose}
           className="absolute top-3 right-4 text-muted hover:text-ink text-xl leading-none"

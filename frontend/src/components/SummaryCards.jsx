@@ -8,7 +8,7 @@ function Card({ label, value, tone = 'ink' }) {
     deposit: 'text-deposit',
   }[tone]
   return (
-    <div className="card px-5 py-4">
+    <div className="card px-5 py-4 transition-transform duration-150 hover:-translate-y-0.5">
       <p className="text-xs font-medium uppercase tracking-wide text-muted mb-1.5">{label}</p>
       <p className={`text-2xl font-semibold tabular-nums ${toneClass}`}>{value}</p>
     </div>
