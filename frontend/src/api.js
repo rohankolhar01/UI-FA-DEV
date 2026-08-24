@@ -175,3 +175,50 @@ export function csvDownloadUrl(accountId) {
 export function excelDownloadUrl(accountId) {
   return `${BASE}/export/excel/${accountId}`
 }
+
+export async function listEmis() {
+  const res = await fetch(`${BASE}/emis`)
+  return handle(res, 'Could not load your EMIs.')
+}
+
+export async function createEmi({ name, monthly_amount, due_day }) {
+  const res = await fetch(`${BASE}/emis`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, monthly_amount, due_day }),
+  })
+  return handle(res, 'Could not add that EMI.')
+}
+
+export async function deleteEmi(emiId) {
+  const res = await fetch(`${BASE}/emis/${emiId}`, { method: 'DELETE' })
+  return handle(res, 'Could not delete that EMI.')
+}
+
+export async function listReminders() {
+  const res = await fetch(`${BASE}/reminders`)
+  return handle(res, 'Could not load your reminders.')
+}
+
+export async function createReminder({ title, due_date, note }) {
+  const res = await fetch(`${BASE}/reminders`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title, due_date, note: note || '' }),
+  })
+  return handle(res, 'Could not add that reminder.')
+}
+
+export async function setReminderDone(reminderId, done) {
+  const res = await fetch(`${BASE}/reminders/${reminderId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ done }),
+  })
+  return handle(res, 'Could not update that reminder.')
+}
+
+export async function deleteReminder(reminderId) {
+  const res = await fetch(`${BASE}/reminders/${reminderId}`, { method: 'DELETE' })
+  return handle(res, 'Could not delete that reminder.')
+}
